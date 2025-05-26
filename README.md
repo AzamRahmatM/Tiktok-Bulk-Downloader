@@ -1,7 +1,10 @@
+Here’s a cleaned-up version with all code fences properly opened and closed, and sections clearly separated:
+
+````markdown
 # TikTok Bulk Video Downloader
 
-[![CI Status](https://img.shields.io/github/actions/workflow/status/AzamRahmatM/Tiktok-Bulk-Downloader/ci.yml?branch=main)](https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader/actions)
-![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/AzamRahmatM/Tiktok-Bulk-Downloader/ci.yml?branch=main)](https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader/actions)  
+![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)  
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Asynchronously download hundreds or thousands of TikTok videos with a single command. Designed for reliability (semaphore-driven concurrency, randomized delays), observability (structured logging, CSV of failures), and easy deployment (Docker & Kubernetes).
@@ -36,39 +39,62 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
    ```bash
    git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
    cd Tiktok-Bulk-Downloader
+````
+
+2. **Install dependencies**
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. **Run the downloader** (once you have a `urls.txt`)
+
+   ```bash
+   python src/download_tiktok_videos.py --url-file urls.txt
+   ```
+
+---
 
 ## 🔗 Extracting Your TikTok Video URLs
 
-Before you run the downloader, you need a list of share-URLs, one per line, to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.
+Before you run the downloader, you need a list of share-URLs—one per line—to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.
 
 ### Motivation
 
-During my internship, I was tasked with archiving **2,800+** corporate TikTok videos for our sales portfolio. Existing tools crashed after a few hundred downloads and offered no way to scrape thousands of links reliably. Rather than manually click each video, I wrote a tiny browser script to **auto-scroll**, **collect every URL**, and **export** them to CSV—and it, along with my downloader, saved over 200 hours of work.
+During my internship, I was tasked with archiving **2,800+** corporate TikTok videos for our sales portfolio. Existing tools crashed after a few hundred downloads and offered no way to scrape thousands of links reliably. Rather than manually click each video, I wrote a tiny browser script to **auto-scroll**, **collect every URL**, and **export** them to CSV—and it saved over 200 hours of work.
 
 ### How it works
 
-1. **Auto-scroll** your profile page until no new videos load  
-2. **Select** each post’s `href` (video URL) and its title text  
-3. **Build** a safe CSV (escaping quotes in titles)  
+1. **Auto-scroll** your profile page until no new videos load
+2. **Select** each post’s `href` (video URL) and its title text
+3. **Build** a safe CSV (escaping quotes in titles)
 4. **Trigger** a download of `tiktok_videos.csv`
 
 ### 1-click console snippet
 
-Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag`**, paste this, and hit **Enter**:
+Open your browser’s DevTools → **Console** on
+`https://www.tiktok.com/@YOUR_USERNAME`, paste this, and hit **Enter**:
 
 ```js
 (async () => {
-  const scrollDelay = 1500, maxScrolls = 50;
-  let lastHeight = 0;   
-  // 1)Auto-scroll until no more new posts (you can increase the speed to your liking)
+  const scrollDelay = 1500,
+        maxScrolls   = 50;
+  let lastHeight = 0;
+
+  // 1) Auto-scroll until no more new posts
   for (let i = 0; i < maxScrolls; i++) {
     window.scrollTo(0, document.body.scrollHeight);
     await new Promise(r => setTimeout(r, scrollDelay));
-    if (document.body.scrollHeight === lastHeight) break;
+    if (document.body.scrollHeight === lastHeight) {
+      console.log(`Stopped after ${i} scrolls`);
+      break;
+    }
     lastHeight = document.body.scrollHeight;
   }
 
-  // 2)Grab each video link & title
+  // 2) Grab each video link & title
   const posts = Array.from(
     document.querySelectorAll(
       'div[data-e2e="user-post-item"] a[href*="/video/"]'
@@ -84,15 +110,17 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag
   if (!rows.length) {
     return console.warn("No videos found – check your page and selectors");
   }
+  console.log(`Found ${rows.length} videos, exporting…`);
 
-  // 3)Building CSV, escaping quotes
+  // 3) Build CSV, escaping quotes
   const header = ['Title','URL'];
-  const csv = [
+  const csvLines = [
     header.join(','),
     ...rows.map(r =>
       `"${r.title.replace(/"/g, '""')}","${r.url}"`
     )
-  ].join('\n');
+  ];
+  const csv = csvLines.join('\n');
 
   // 4) Trigger download
   const blob = new Blob([csv], { type: 'text/csv' });
@@ -103,24 +131,29 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag
   dl.click();
   document.body.removeChild(dl);
 
-  console.log(`Exported ${rows.length} URLs to tiktok_videos.csv`);
+  console.log("✅ CSV download triggered");
 })();
 ```
 
-1. **Paste & run**  
+1. **Paste & run**
    Paste the snippet into your browser console on your TikTok profile page and press **Enter**.
 
-2. **Wait**  
-   Let it auto‐scroll and collect all posts (you’ll see a log message when it’s finished).
+2. **Wait**
+   Let it auto-scroll and collect all posts (you’ll see a log when it finishes).
 
-3. **Download**  
+3. **Download**
    A file named `tiktok_videos.csv` will appear in your **Downloads** folder.
 
-4. **Prepare URLs**  
+4. **Prepare URLs**
    Open `tiktok_videos.csv`, copy the **URL** column values (one per line) into `urls.txt`.
 
-5. **Run the downloader**  
-   
-```bash
+5. **Run the downloader**
+
+   ```bash
    python src/download_tiktok_videos.py --url-file urls.txt
+   ```
+
+```
+
+That should render correctly on GitHub with all code blocks highlighted and no nesting issues.
 ```
