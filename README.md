@@ -39,11 +39,11 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 
 ## 🔗 Extracting Your TikTok Video URLs
 
-Before you run the downloader, you need a list of share-URLs—one per line—to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.
+Before you run the downloader, you need a list of share-URLs, one per line, to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.
 
 ### Motivation
 
-During my internship, I was tasked with archiving **2 800+** corporate TikTok videos for our sales portfolio. Existing tools crashed after a few hundred downloads and offered no way to scrape thousands of links reliably. Rather than manually click each video, I wrote a tiny browser script to **auto-scroll**, **collect every URL**, and **export** them to CSV—and it saved over 200 hours of work.
+During my internship, I was tasked with archiving **2,800+** corporate TikTok videos for our sales portfolio. Existing tools crashed after a few hundred downloads and offered no way to scrape thousands of links reliably. Rather than manually click each video, I wrote a tiny browser script to **auto-scroll**, **collect every URL**, and **export** them to CSV—and it, along with my downloader, saved over 200 hours of work.
 
 ### How it works
 
