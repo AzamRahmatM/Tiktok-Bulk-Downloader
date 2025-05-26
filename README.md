@@ -103,7 +103,7 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag
   dl.click();
   document.body.removeChild(dl);
 
-  console.log(`✅ Exported ${rows.length} URLs to tiktok_videos.csv`);
+  console.log(`Exported ${rows.length} URLs to tiktok_videos.csv`);
 })();
 ```
 
