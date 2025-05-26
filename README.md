@@ -105,7 +105,7 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@YOUR_US
 
   console.log(`✅ Exported ${rows.length} URLs to tiktok_videos.csv`);
 })();
-```js
+```
 
 1. **Paste & run**  
    Paste the snippet into your browser console on your TikTok profile page and press **Enter**.
@@ -120,5 +120,7 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@YOUR_US
    Open `tiktok_videos.csv`, copy the **URL** column values (one per line) into `urls.txt`.
 
 5. **Run the downloader**  
-   ```bash
+   
+```bash
    python src/download_tiktok_videos.py --url-file urls.txt
+```
