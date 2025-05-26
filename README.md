@@ -54,13 +54,13 @@ During my internship, I was tasked with archiving **2 800+** corporate TikTok vi
 
 ### 1-click console snippet
 
-Open your browser’s DevTools → Console on **`https://www.tiktok.com/@YOUR_USERNAME`**, paste this, and hit **Enter**:
+Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag`**, paste this, and hit **Enter**:
 
 ```js
 (async () => {
   const scrollDelay = 1500, maxScrolls = 50;
   let lastHeight = 0;   
-  // 1) Auto-scroll until no more new posts
+  // 1)Auto-scroll until no more new posts (you can increase the speed to your liking)
   for (let i = 0; i < maxScrolls; i++) {
     window.scrollTo(0, document.body.scrollHeight);
     await new Promise(r => setTimeout(r, scrollDelay));
@@ -68,7 +68,7 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@YOUR_US
     lastHeight = document.body.scrollHeight;
   }
 
-  // 2) Grab each video link & title
+  // 2)Grab each video link & title
   const posts = Array.from(
     document.querySelectorAll(
       'div[data-e2e="user-post-item"] a[href*="/video/"]'
@@ -85,7 +85,7 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@YOUR_US
     return console.warn("No videos found – check your page and selectors");
   }
 
-  // 3) Build CSV, escaping quotes
+  // 3)Building CSV, escaping quotes
   const header = ['Title','URL'];
   const csv = [
     header.join(','),
