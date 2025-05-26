@@ -1,21 +1,32 @@
-# Read URLs from a file and format them for a Python list
-input_file = 'urls.txt'
-output_file = 'formatted12345678_urls.py'
+#!/usr/bin/env python3
+"""
+Read URLs from urls.txt and output a Python module
+that defines `video_urls = [...]`.
+"""
 
-# Read URLs from the input file
-with open(input_file, 'r') as file:
-    urls = file.readlines()
+from pathlib import Path
 
-# Remove any trailing whitespace characters
-urls = [url.strip() for url in urls]
 
-# Create the formatted list of URLs
-formatted_urls = ',\n'.join([f"'{url}'" for url in urls])
+def main():
+    input_file = "urls.txt"
+    output_file = "formatted12345678_urls.py"
 
-# Write the formatted URLs to the output file
-with open(output_file, 'w') as file:
-    file.write("video_urls = [\n")
-    file.write(f"{formatted_urls}\n")
-    file.write("]\n")
+    # Read and clean URLs
+    urls = Path(input_file).read_text().splitlines()
+    urls = [url.strip() for url in urls if url.strip()]
 
-print(f"Formatted URLs have been saved to {output_file}")
+    # Join into a Python list literal
+    formatted = ",\n".join(f"'{u}'" for u in urls)
+
+    # Write out the module
+    data = (
+        "video_urls = [\n"
+        f"{formatted}\n"
+        "]\n"
+    )
+    Path(output_file).write_text(data)
+    print(f"Formatted URLs have been saved to {output_file}")
+
+
+if __name__ == "__main__":
+    main()
