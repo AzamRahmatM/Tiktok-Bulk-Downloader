@@ -1,4 +1,4 @@
 aiohttp>=3.9
 tqdm>=4.66
 pandas>=2.2
-python-dotenv>=1.0      # optional
+python-dotenv>=1.0
