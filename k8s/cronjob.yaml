@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: downloader
-            image: ghcr.io/<YOUR_GH_USER>/tiktok-dl:latest
+            image: ghcr.io/azamrahmatm/tiktok-dl:latest
             env:
             - name: URL_FILE
               value: /app/urls.txt
