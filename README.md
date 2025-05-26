@@ -1,6 +1,7 @@
 # TikTok Bulk Video Downloader
 
-[![CI Status](https://img.shields.io/github/actions/workflow/status/AzamRahmatM/Tiktok-Bulk-Downloader/ci.yml?branch=main)](https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader/actions)  
+[![CI Status](https://img.shields.io/github/actions/workflow/status/AzamRahmatM/Tiktok-Bulk-Downloader/ci.yml?branch=main)](https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader/actions)
+![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Asynchronously download hundreds or thousands of TikTok videos with a single command. Designed for reliability (semaphore-driven concurrency, randomized delays), observability (structured logging, CSV of failures), and easy deployment (Docker & Kubernetes).
