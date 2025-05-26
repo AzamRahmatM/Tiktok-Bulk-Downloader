@@ -51,7 +51,7 @@ Before you run the downloader, you need a list of share-URLs, one per line, to f
 
 ### Motivation
 
-During my internship, I was tasked with archiving **2,800+** corporate TikTok videos for our sales portfolio. Existing tools crashed after a few hundred downloads and offered no way to scrape thousands of links reliably. Rather than manually click each video, I wrote a tiny browser script to **auto-scroll**, **collect every URL**, and **export** them to CSV—and it, along with my downloader, saved over 200 hours of work.
+During my internship, I was tasked with archiving **2,800+** corporate TikTok videos for our sales portfolio. Existing tools crashed after a few hundred downloads and offered no way to scrape thousands of links reliably. Rather than manually click each video, I wrote a tiny browser script to **auto-scroll**, **collect every URL**, and **export** them to CSV, and it, along with my downloader, saved over 200 hours of work.
 
 ### How it works
 
@@ -60,7 +60,7 @@ During my internship, I was tasked with archiving **2,800+** corporate TikTok vi
 3. **Build** a safe CSV (escaping quotes in titles)  
 4. **Trigger** a download of `tiktok_videos.csv`
 
-### 1-click console snippet
+### one-click console snippet
 
 Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag`**, paste this, and hit **Enter**:
 
