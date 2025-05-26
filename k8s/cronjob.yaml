@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tiktok-downloader
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: downloader
+            image: ghcr.io/<YOUR_GH_USER>/tiktok-dl:latest
+            env:
+            - name: URL_FILE
+              value: /app/urls.txt
+            volumeMounts:
+            - name: videos
+              mountPath: /data
+          restartPolicy: OnFailure
+          volumes:
+          - name: videos
+            persistentVolumeClaim:
+              claimName: tiktok-videos
