@@ -105,6 +105,8 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@YOUR_US
 
   console.log(`✅ Exported ${rows.length} URLs to tiktok_videos.csv`);
 })();
+```js
+
 1. **Paste & run**  
    Paste the snippet into your browser console on your TikTok profile page and press **Enter**.
 
