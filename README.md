@@ -44,6 +44,19 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
    ```bash
    git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
    cd Tiktok-Bulk-Downloader
+2. **Download**
+```bash
+python src/download_tiktok_videos.py \
+  --url-file urls.txt \
+  --download-dir downloads \
+  --batch-size 20 \
+  --concurrency 5 \
+  --min-delay 1 \
+  --max-delay 3 \
+  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
+```
+3. **How to get URL?**  
+    See below:
 
 ## 🔗 Extracting Your TikTok Video URLs
 
@@ -130,5 +143,12 @@ Open your browser’s DevTools → Console on **`https://www.tiktok.com/@yourtag
 5. **Run the downloader**  
    
 ```bash
-   python src/download_tiktok_videos.py --url-file urls.txt
+python src/download_tiktok_videos.py \
+  --url-file urls.txt \
+  --download-dir downloads \
+  --batch-size 20 \
+  --concurrency 5 \
+  --min-delay 1 \
+  --max-delay 3 \
+  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
 ```
