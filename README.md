@@ -28,7 +28,10 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
   Extracts the `playAddrNoWaterMark` URL via regex to save clean MP4s.
 
 - **Robust Logging & Metrics**  
-  Console + file logging (`tiktokdownload.log`), automatic retries, and a final `failed_urls.csv` for audit or re-runs.
+  Console + file logging (tiktokdownload.log), automatic retries with exponential backoff on 403/5xx errors, and a final failed_urls.csv for audit or re-runs.
+
+- **Automatic Retry Logic**  
+  On any non-200 or network error, the downloader will retry up to 3 times with exponential backoff (1 s -> 2 s -> 4 s) before marking a URL as failed.
 
 - **CLI-Driven**  
   Fully configurable via flags or environment variables: URL list, output dir, batch size, concurrency, delays, and User-Agent.
