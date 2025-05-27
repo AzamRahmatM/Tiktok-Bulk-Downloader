@@ -17,8 +17,7 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
   - [How it works](#how-it-works)
   - [1-click console snippet](#1-click-console-snippet)
 ---
-## 🔥 Key Features
-
+## Key Features 🔥
 - **Async + Concurrency Control**  
   Uses `asyncio` + `aiohttp` + an `asyncio.Semaphore` cap to safely burst requests without overwhelming the network or TikTok’s servers.
 
@@ -40,8 +39,7 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 - **Container & Cloud-Native Ready**  
   Comes with a Dockerfile and optional Kubernetes CronJob manifest for one-click deploy.
 ---
-## 🚀 Quick Start
-
+## Quick Start 🚀
 1. **Clone and enter**  
    ```bash
    git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
@@ -60,8 +58,7 @@ python src/download_tiktok_videos.py \
 3. **How to get URLs?**  
     I know what you are thinking. How do I get 1000+ of URLs? See [below](#extracting-your-tiktok-video-urls):
 ---
-## 🛠️ Automated Deployment using Ansible (IaC)
-
+## Automated Deployment using Ansible (IaC) 🛠️
 We ship an Ansible playbook that:
 
 * Installs Git & Python
@@ -93,8 +90,7 @@ We ship an Ansible playbook that:
    ansible-playbook -i inventory.ini ansible/deploy-downloader.yml
    ```
 ---
-## 🔗 Extracting Your TikTok Video URLs
-
+## Extracting Your TikTok Video URLs 🔗
 Before you run the downloader, you need a list of share-URLs, one per line, to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.
 
 ### Motivation
