@@ -5,4 +5,4 @@ videos/
 *.csv
 *.log
 .env
-downloads/
+downloads/inventory.ini
