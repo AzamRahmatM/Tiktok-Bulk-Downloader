@@ -22,53 +22,57 @@ logging.basicConfig(
 )
 
 
-async def download_video(session, url, download_dir, headers):
-    try:
-        video_id = url.rstrip("/").split("/")[-1]
-        file_path = download_dir / f"{video_id}.mp4"
-
-        if file_path.exists():
-            logging.info(f"Video {video_id} already exists, skipping.")
-            return None
-
-        # fetch share page
-        async with session.get(url, headers=headers) as resp:
-            if resp.status != 200:
-                logging.error(
-                    f"Failed to fetch page {url}: HTTP {resp.status}"
-                )
-                return url
-            content = await resp.text()
-
-        # extract direct video URL
-        match = re.search(
-            r'"playAddr(?:NoWaterMark)?":"([^"]+)"', content
-        )
-        if not match:
-            logging.error(
-                f"Could not find video URL in the page content for {url}"
-            )
-            return url
-
-        video_url = match.group(1).replace("\\u002F", "/")
-        # fetch video bytes
-        async with session.get(video_url, headers=headers) as video_resp:
-            if video_resp.status != 200:
-                logging.error(
-                    f"Failed to download from {video_url}: HTTP "
-                    f"{video_resp.status}"
-                )
-                return url
-            data = await video_resp.read()
-
-        # write file
-        file_path.write_bytes(data)
-        logging.info(f"Downloaded: {file_path}")
+async def download_video(session, url, download_dir, headers, max_retries=3):
+    video_id = url.rstrip("/").split("/")[-1]
+    file_path = download_dir / f"{video_id}.mp4"
+    if file_path.exists():
+        logging.info(f"Video {video_id} already exists, skipping.")
         return None
 
-    except Exception as e:
-        logging.error(f"Failed to download {url}: {e}")
-        return url
+    backoff = 1
+    for attempt in range(1, max_retries + 1):
+        try:
+            # 1) fetch share page
+            async with session.get(url, headers=headers) as resp:
+                resp.raise_for_status()
+                content = await resp.text()
+
+            # 2) extract direct video URL
+            match = re.search(r'"playAddr(?:NoWaterMark)?":"([^"]+)"', content)
+            if not match:
+                logging.error(f"Could not find video URL for {url}")
+                return url
+            video_url = match.group(1).replace("\\u002F", "/")
+
+            # 3) fetch video bytes
+            async with session.get(video_url, headers=headers) as video_resp:
+                video_resp.raise_for_status()
+                data = await video_resp.read()
+
+            # 4) write file and return success
+            file_path.write_bytes(data)
+            logging.info(f"Downloaded: {file_path}")
+            return None
+
+        except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+            # if we still have retries left, back off and retry
+            if attempt < max_retries:
+                logging.warning(
+                    f"Attempt {attempt} failed for {url} ({e}), "
+                    f"retrying in {backoff}s..."
+                )
+                await asyncio.sleep(backoff)
+                backoff *= 2
+                continue
+            else:
+                logging.error(
+                    f"All {max_retries} attempts failed for {url}: {e}"
+                )
+                return url
+        except Exception as e:
+            # any other exception bail out immediately
+            logging.error(f"Unexpected error for {url}: {e}")
+            return url
 
 
 async def process_batch(session, batch, sem, download_dir, headers):

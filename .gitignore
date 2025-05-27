@@ -5,3 +5,4 @@ videos/
 *.csv
 *.log
 .env
+downloads/
