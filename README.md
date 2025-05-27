@@ -11,7 +11,7 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 
 - [Key Features](#key-features)
 - [Quick Start](#quick-start)
-- [Automated Deployment using Ansible (IaC)](#automated-deployment-using-ansible-(IaC))
+- [Automated Deployment using Ansible (IaC)](#automated-deployment-using-ansible-iac)
 - [Extracting Your TikTok Video URLs](#extracting-your-tiktok-video-urls)
   - [Motivation](#motivation)
   - [How it works](#how-it-works)
