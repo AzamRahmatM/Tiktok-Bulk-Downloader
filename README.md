@@ -15,7 +15,7 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
   - [Motivation](#motivation)
   - [How it works](#how-it-works)
   - [1-click console snippet](#1-click-console-snippet)
-
+---
 ## 🔥 Key Features
 
 - **Async + Concurrency Control**  
