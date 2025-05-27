@@ -9,9 +9,10 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 ---
 ## Table of Contents
 
-- [🔥 Key Features](#key-features)
-- [🚀 Quick Start](#quick-start)
-- [🔗 Extracting Your TikTok Video URLs](#extracting-your-tiktok-video-urls)
+- [Key Features](#key-features)
+- [Quick Start](#quick-start)
+- [Automated Deployment using Ansible (IaC)](#automated-deployment-using-ansible-iac)
+- [Extracting Your TikTok Video URLs](#extracting-your-tiktok-video-urls)
   - [Motivation](#motivation)
   - [How it works](#how-it-works)
   - [1-click console snippet](#1-click-console-snippet)
@@ -38,6 +39,26 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 
 - **Container & Cloud-Native Ready**  
   Comes with a Dockerfile and optional Kubernetes CronJob manifest for one-click deploy.
+---
+## 🚀 Quick Start
+
+1. **Clone and enter**  
+   ```bash
+   git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
+   cd Tiktok-Bulk-Downloader
+2. **Download**
+```bash
+python src/download_tiktok_videos.py \
+  --url-file urls.txt \
+  --download-dir downloads \
+  --batch-size 20 \
+  --concurrency 5 \
+  --min-delay 1 \
+  --max-delay 3 \
+  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
+```
+3. **How to get URLs?**  
+    I know what you are thinking. How do I get 1000+ of URLs? See [below](#extracting-your-tiktok-video-urls):
 ---
 ## 🛠️ Automated Deployment using Ansible (IaC)
 
@@ -71,27 +92,6 @@ We ship an Ansible playbook that:
    ```bash
    ansible-playbook -i inventory.ini ansible/deploy-downloader.yml
    ```
-
----
-## 🚀 Quick Start
-
-1. **Clone and enter**  
-   ```bash
-   git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
-   cd Tiktok-Bulk-Downloader
-2. **Download**
-```bash
-python src/download_tiktok_videos.py \
-  --url-file urls.txt \
-  --download-dir downloads \
-  --batch-size 20 \
-  --concurrency 5 \
-  --min-delay 1 \
-  --max-delay 3 \
-  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
-```
-3. **How to get URLs?**  
-    I know what you are thinking. How do I get 1000+ of URLs? See below:
 ---
 ## 🔗 Extracting Your TikTok Video URLs
 
