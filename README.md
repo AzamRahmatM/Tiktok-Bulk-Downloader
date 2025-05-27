@@ -63,8 +63,8 @@ We ship an Ansible playbook that:
     ```
 
 3. **Dry-run**
-   ```bash
-  ansible-playbook -i inventory.ini ansible/deploy-downloader.yml --check
+   ```bash 
+   ansible-playbook -i inventory.ini ansible/deploy-downloader.yml --check
    ```
 
 4. **Apply for real** 
