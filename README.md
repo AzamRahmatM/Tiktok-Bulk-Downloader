@@ -55,8 +55,8 @@ python src/download_tiktok_videos.py \
   --max-delay 3 \
   --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
 ```
-3. **How to get URL?**  
-    See below:
+3. **How to get URLs?**  
+    I know what you are thinking. How do I get 1000+ of URLs? See below:
 
 ## 🔗 Extracting Your TikTok Video URLs
 
