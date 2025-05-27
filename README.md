@@ -1,4 +1,4 @@
-# TikTok Bulk Video Downloader
+# TikTok Bulk Video Downloader - Automation
 
 [![CI Status](https://img.shields.io/github/actions/workflow/status/AzamRahmatM/Tiktok-Bulk-Downloader/ci.yml?branch=main)](https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader/actions)
 ![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)
