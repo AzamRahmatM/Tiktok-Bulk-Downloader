@@ -1,0 +1,58 @@
+---
+- name: Deploying Automation of TikTok Bulk Video Downloader
+  hosts: all
+  become: yes
+  vars:
+    repo_url: https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
+    app_dir: /opt/tiktok-bulk-downloader
+    venv_dir: "{{ app_dir }}/venv"
+    download_dir: "{{ app_dir }}/downloads"
+    cron_schedule_minute: '0'
+    cron_schedule_hour: '2'
+    python_executable: '/usr/bin/python3'
+  tasks:
+    - name: Make sure Git is installed
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Make sure Python3 and venv support are installed
+      apt:
+        name:
+          - python3
+          - python3-venv
+          - python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Clone/update repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: main
+        force: yes
+
+    - name: Create Python virtual environment
+      command: "{{ python_executable }} -m venv {{ venv_dir }}"
+      args:
+        creates: "{{ venv_dir }}/bin/activate"
+
+    - name: Install Python dependencies
+      pip:
+        requirements: "{{ app_dir }}/requirements.txt"
+        virtualenv: "{{ venv_dir }}"
+
+    - name: Make sure download directory exists
+      file:
+        path: "{{ download_dir }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: '0755'
+
+    - name: Schedule downloader via cron
+      cron:
+        name: "TikTok Bulk Video Downloader"
+        minute: "{{ cron_schedule_minute }}"
+        hour: "{{ cron_schedule_hour }}"
+        job: "cd {{ app_dir }} && {{ venv_dir }}/bin/python src/download_tiktok_videos.py --url-file urls.txt --download-dir downloads --batch-size 50 --concurrency 20 --min-delay 2 --max-delay 5"
