@@ -40,59 +40,6 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 - **Container & Cloud-Native Ready**  
   Comes with a Dockerfile and optional Kubernetes CronJob manifest for one-click deploy.
 ---
-## 🚀 Quick Start
-
-1. **Clone and enter**  
-   ```bash
-   git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
-   cd Tiktok-Bulk-Downloader
-2. **Download**
-```bash
-python src/download_tiktok_videos.py \
-  --url-file urls.txt \
-  --download-dir downloads \
-  --batch-size 20 \
-  --concurrency 5 \
-  --min-delay 1 \
-  --max-delay 3 \
-  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
-```
-3. **How to get URLs?**  
-    I know what you are thinking. How do I get 1000+ of URLs? See [below](#-extracting-your-tiktok-video-urls):
----
-## 🛠️ Automated Deployment using Ansible (IaC)
-
-We ship an Ansible playbook that:
-
-* Installs Git & Python
-* Clones this repo into `/opt/tiktok-bulk-downloader`
-* Sets up a virtualenv + requirements
-* Creates the `downloads/` folder
-* Schedules a daily Cron job at 02:00
-
-### Quick start (local test)
-
-1. **Inventory** (`inventory.ini`)
-   ```ini
-   [downloaders]
-   localhost ansible_connection=local
-    ```
-
-2. **Syntax check**
-   ```bash
-   ansible-playbook --syntax-check ansible/deploy-downloader.yml
-    ```
-
-3. **Dry-run**
-   ```bash 
-   ansible-playbook -i inventory.ini ansible/deploy-downloader.yml --check
-   ```
-
-4. **Apply for real** 
-   ```bash
-   ansible-playbook -i inventory.ini ansible/deploy-downloader.yml
-   ```
----
 ## 🔗 Extracting Your TikTok Video URLs
 
 Before you run the downloader, you need a list of share-URLs, one per line, to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.
@@ -187,3 +134,57 @@ python src/download_tiktok_videos.py \
   --max-delay 3 \
   --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
 ```
+---
+## 🚀 Quick Start for for the files
+
+1. **Clone and enter**  
+   ```bash
+   git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
+   cd Tiktok-Bulk-Downloader
+2. **Download**
+```bash
+python src/download_tiktok_videos.py \
+  --url-file urls.txt \
+  --download-dir downloads \
+  --batch-size 20 \
+  --concurrency 5 \
+  --min-delay 1 \
+  --max-delay 3 \
+  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
+```
+3. **How to get URLs?**  
+    I know what you are thinking. How do I get 1000+ of URLs? See [below](#-extracting-your-tiktok-video-urls):
+---
+## 🛠️ Automated Deployment using Ansible (IaC)
+
+We ship an Ansible playbook that:
+
+* Installs Git & Python
+* Clones this repo into `/opt/tiktok-bulk-downloader`
+* Sets up a virtualenv + requirements
+* Creates the `downloads/` folder
+* Schedules a daily Cron job at 02:00
+
+### Quick start (local test)
+
+1. **Inventory** (`inventory.ini`)
+   ```ini
+   [downloaders]
+   localhost ansible_connection=local
+    ```
+
+2. **Syntax check**
+   ```bash
+   ansible-playbook --syntax-check ansible/deploy-downloader.yml
+    ```
+
+3. **Dry-run**
+   ```bash 
+   ansible-playbook -i inventory.ini ansible/deploy-downloader.yml --check
+   ```
+
+4. **Apply for real** 
+   ```bash
+   ansible-playbook -i inventory.ini ansible/deploy-downloader.yml
+   ```
+---
