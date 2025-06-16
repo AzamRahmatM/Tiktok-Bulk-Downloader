@@ -153,7 +153,7 @@ python src/download_tiktok_videos.py \
   --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)…"
 ```
 3. **How to get URLs?**  
-    I know what you are thinking. How do I get 1000+ of URLs? See [below](#-extracting-your-tiktok-video-urls):
+    I know what you are thinking. How do I get 1000+ of URLs? See [here](#-extracting-your-tiktok-video-urls):
 ---
 ## 🛠️ Automated Deployment using Ansible (IaC)
 
