@@ -141,7 +141,10 @@ python src/download_tiktok_videos.py \
    ```bash
    git clone https://github.com/AzamRahmatM/Tiktok-Bulk-Downloader.git
    cd Tiktok-Bulk-Downloader
-2. **Download**
+2. **Download Python**  
+   Download & install from https://www.python.org/downloads/  
+   During install, **check “Add Python to PATH.”**
+3. **Download your videos**
 ```bash
 python src/download_tiktok_videos.py \
   --url-file urls.txt \
