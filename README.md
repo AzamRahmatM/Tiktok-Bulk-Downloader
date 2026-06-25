@@ -10,12 +10,13 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 ## Table of Contents
 
 - [Key Features](#-key-features)
+- [AI Semantic Search](#-ai-semantic-search)
+- [Visual Search (CLIP)](#-visual-search-clip)
+- [Auto-Tagging & Topic Clustering](#-auto-tagging--topic-clustering)
+- [Web Dashboard](#-web-dashboard)
 - [Quick Start](#-quick-start)
 - [Automated Deployment using Ansible (IaC)](#%EF%B8%8F-automated-deployment-using-ansible-iac)
 - [Extracting Your TikTok Video URLs](#-extracting-your-tiktok-video-urls)
-  - [Motivation](#motivation)
-  - [How it works](#how-it-works)
-  - [1-click console snippet](#1-click-console-snippet)
 ---
 ## 🔥 Key Features
 
@@ -39,7 +40,147 @@ Asynchronously download hundreds or thousands of TikTok videos with a single com
 
 - **Container & Cloud-Native Ready**  
   Comes with a Dockerfile and optional Kubernetes CronJob manifest for one-click deploy.
+
+- **🧠 AI Semantic Search (local, offline)**  
+  Transcribes every downloaded video (`faster-whisper`), embeds transcripts
+  segment-by-segment (`sentence-transformers`), and stores vectors in a local
+  SQLite index. Search thousands of videos by meaning and jump to the exact timestamp.
+
+- **🖼️ CLIP Visual Search**  
+  Extracts keyframes from each video and embeds them with OpenAI CLIP (ViT-B/32).
+  Search by what's *on screen* — "person outdoors with product" — not just spoken words.
+
+- **🏷️ Auto-Tagging & Topic Clustering**  
+  HDBSCAN auto-discovers topic groups, TF-IDF generates human-readable labels.
+  2,800 videos → organized clusters like "pricing, enterprise" or "product, demo".
+
+- **📊 Streamlit Web Dashboard**  
+  Dark-themed, portfolio-ready UI with semantic search, inline video playback
+  with timestamp jumping, topic cluster browser, and library statistics.
 ---
+## 🧠 AI Semantic Search
+
+A folder of 2,800 `7234985.mp4` files is impossible to search. This layer turns that pile
+into a queryable library: ask for an idea in plain English and get back the exact video and
+moment that matches — even if those words were never written down anywhere.
+
+**Full pipeline:**
+
+```
+transcribe (faster-whisper) → embed segments (MiniLM) → SQLite vector index → cosine search
+                            ↘ extract keyframes (OpenCV) → embed frames (CLIP) → visual search
+                            ↘ mean embeddings → HDBSCAN clustering → TF-IDF labels
+```
+
+### Setup
+
+```bash
+pip install -r requirements-ai.txt
+```
+
+### 1. Enrich your downloaded videos
+
+Run this after the downloader finishes. Already-indexed videos are skipped, so it is safe to
+re-run after each new batch.
+
+```bash
+# Text-only enrichment (transcription + text embeddings)
+python src/enrich_videos.py --download-dir downloads
+
+# Full enrichment with visual keyframes (adds CLIP embeddings)
+python src/enrich_videos.py --download-dir downloads --visual
+
+# Options: --model base|small|medium  --device cuda  --force  --frame-interval 3
+```
+
+### 2. Search by meaning (text)
+
+```bash
+python src/search_videos.py "someone demoing the product outdoors"
+python src/search_videos.py "pricing discussion" --top-k 10
+```
+
+```text
+Top 2 matches for: "pricing discussion"
+
+1. [0.731] 7234985123  @ 01:12
+   downloads/7234985123.mp4
+   "so our enterprise tier starts at forty nine a month per seat …"
+```
+
+Each hit points at the exact `.mp4` and the timestamp inside it. Everything runs locally on CPU
+(`int8` quantization) — switch to `--device cuda` for a large speedup.
+
+---
+## 🖼️ Visual Search (CLIP)
+
+Search videos by what's *on screen*, not just spoken words. CLIP embeds video frames and text
+queries into the same vector space, so "person holding product outdoors" matches frames where
+that happens — even if nobody said those words.
+
+```bash
+# First, enrich with --visual to extract keyframes
+python src/enrich_videos.py --download-dir downloads --visual
+
+# Visual search is available in the Streamlit dashboard
+# or programmatically:
+#   from ai.store import search_visual
+#   results = search_visual("video_index.db", "outdoor product demo")
+```
+
+**How it works:**
+- Extracts 1 keyframe every 3 seconds (configurable via `--frame-interval`)
+- Embeds each frame with CLIP ViT-B/32 (512-dim vectors)
+- Stores frame embeddings in the SQLite index
+- At search time, embeds the text query with CLIP's text encoder and cosine-searches against frames
+
+---
+## 🏷️ Auto-Tagging & Topic Clustering
+
+Automatically organize your video library into topic groups without manual labels.
+
+```bash
+# Auto-cluster with HDBSCAN (auto-picks number of clusters)
+python src/cluster_videos.py
+
+# Or use KMeans with a fixed number of clusters
+python src/cluster_videos.py --method kmeans --k 10
+```
+
+```text
+============================================================
+  Topic Clusters (5 groups)
+============================================================
+
+  Cluster 0: "pricing, enterprise, subscription" (47 videos)
+  Cluster 1: "product, demo, walkthrough" (123 videos)
+  Cluster 2: "testimonial, customer, success" (31 videos)
+  Cluster 3: "tutorial, setup, getting started" (58 videos)
+  Cluster 4: "announcement, update, release" (22 videos)
+
+  Noise: 14 unclustered videos
+```
+
+**How it works:**
+- Aggregates segment embeddings into one mean vector per video
+- Runs HDBSCAN (falls back to KMeans if too few clusters found)
+- Labels each cluster with TF-IDF's top distinguishing terms from transcripts
+- Saves cluster assignments to the index for the dashboard to display
+
+---
+## 📊 Web Dashboard
+
+A polished Streamlit dashboard with a warm, editorial "museum" aesthetic (cream palette, serif headings, split-text reveal animations) for browsing and searching your video library.
+
+```bash
+streamlit run src/app.py
+```
+
+**Pages:**
+- 🔍 **Search** — Semantic text search or CLIP visual search with animated result cards, inline video playback, and timestamp jumping
+- 📊 **Library** — Index stats (videos, segments, frames, clusters), full video table, language breakdown, duration distribution
+- 🏷️ **Topics** — Browse auto-discovered topic clusters with expandable video lists and TF-IDF labels
+
 ## 🔗 Extracting Your TikTok Video URLs
 
 Before you run the downloader, you need a list of share-URLs, one per line, to feed into `urls.txt`. We’ll grab them in bulk right from your browser with a small JavaScript snippet.

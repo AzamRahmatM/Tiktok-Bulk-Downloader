@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 100
+# app.py embeds CSS string literals (a web-font @import URL and a noise
+# data-URI) that cannot be wrapped without breaking the CSS, so E501 is
+# waived for that file only.
+per-file-ignores =
+    src/app.py: E501

@@ -1,8 +1,50 @@
+# ── Python ───────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
 .venv/
-videos/
-*.csv
-*.log
+venv/
+env/
+
+# ── Testing / tooling caches ─────────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── Secrets / env ────────────────────────────────────────────────────
 .env
+*.env
+
+# ── Logs ─────────────────────────────────────────────────────────────
+*.log
+
+# ── Downloaded videos (never commit media) ───────────────────────────
+downloads/
+downloaded_videos/
+videos/
+*.mp4
+
+# ── AI enrichment artifacts ──────────────────────────────────────────
+video_index.db
+video_index.db-*
+
+# ── Run outputs ──────────────────────────────────────────────────────
+*.csv
+formatted*_urls.py
 downloads/inventory.ini
+
+# ── OS / editor junk ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Keep the test fixture even though *.mp4 is ignored above.
+!tests/sample.mp4
